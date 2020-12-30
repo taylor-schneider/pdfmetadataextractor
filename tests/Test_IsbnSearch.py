@@ -19,4 +19,9 @@ class test_IsbnSearch(TestCase):
         isbns = IsbnSearch.find_isbns_in_pdf(file_path)
         self.assertEqual(["978-1-849510-82-0"], isbns)
 
+    def test_get_isbn_from_pdf__with_no_ocr_text(self):
+        file_name = "Solid Geometry.pdf"
+        file_path = os.path.join(self.root_dir, "tests", "pdfs", "With No OCR Text", file_name)
+        isbns = IsbnSearch.find_isbns_in_pdf(file_path)
+        self.assertEqual([], isbns)
 

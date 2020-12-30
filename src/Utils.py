@@ -5,8 +5,6 @@ import io
 
 def __get_lines_from_pdf(pdf, page_number):
 
-    possible_isbns = []
-
     # Extract the text from the page
     page = pdf.getPage(page_number)
     page_text = page.extractText()
