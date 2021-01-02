@@ -1,4 +1,5 @@
 from PyPDF2 import PdfFileReader
+import Utils
 import os
 import io
 
@@ -23,6 +24,7 @@ def get_lines_from_pdf_page(o, page_number):
 
     try:
         # Determine what type of type of object we are dealing with
+        # It could be a buffer, pdf, or file path
         if isinstance(o, io.BufferedIOBase):
             pdf = PdfFileReader(o)
             return __get_lines_from_pdf(pdf, page_number)
@@ -30,10 +32,19 @@ def get_lines_from_pdf_page(o, page_number):
             pdf = o
             return __get_lines_from_pdf(pdf, page_number)
         elif type(o) == str:
-            with open(o, 'rb') as f:
+            file_path = o
+            with open(file_path, 'rb') as f:
                 pdf = PdfFileReader(f)
                 return __get_lines_from_pdf(pdf, page_number)
         else:
             raise Exception("The type supplied was not valid.")
     except Exception as e:
         raise Exception("Unable to get lines from pdf page.") from e
+
+def page_has_text(pdf, page_number):
+    lines = Utils.get_lines_from_pdf_page(pdf, page_number)
+    return len(lines) > 0
+
+def page_has_font_resource(pdf, page_number):
+    page_data = pdf.getPage(page_number)
+    return '/Font' in page_data['/Resources']
