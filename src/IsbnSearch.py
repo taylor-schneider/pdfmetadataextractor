@@ -61,4 +61,3 @@ def find_isbns_in_pdf(file_path):
             return isbns
     except Exception as e:
         raise Exception("An error occurred while trying to get ISBN numbers from a PDF.") from e
-
