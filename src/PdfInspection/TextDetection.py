@@ -1,5 +1,5 @@
 from PyPDF2 import PdfFileReader
-import Utils
+from PdfInspection import Utils
 
 
 # These functions will use the PdfFileReader class to open a pdf file.

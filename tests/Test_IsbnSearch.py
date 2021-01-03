@@ -1,6 +1,7 @@
 from unittest import TestCase
 import os
-import IsbnSearch
+from PdfInspection import IsbnSearch
+
 
 class test_IsbnSearch(TestCase):
 
