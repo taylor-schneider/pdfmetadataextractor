@@ -1,5 +1,5 @@
 from unittest import TestCase
-from PdfInspection import TextDetection
+from FileProcessing.pdf.PdfInspection import TextDetection
 import os
 
 
@@ -8,7 +8,8 @@ class test_PdfHasText(TestCase):
     def __init__(self, *args, **kwargs):
 
         self.current_directory = os.path.dirname(os.path.abspath(__file__))
-        self.root_dir = os.path.dirname(self.current_directory)
+        self.tests_dir = os.path.dirname(self.current_directory)
+        self.root_dir = os.path.dirname(self.tests_dir)
         super(test_PdfHasText, self).__init__(*args, **kwargs)
 
     def test__pfd_has_ocr_text__false(self):

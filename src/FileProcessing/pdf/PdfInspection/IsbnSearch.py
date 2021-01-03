@@ -1,4 +1,4 @@
-from PdfInspection.Utils import get_lines_from_pdf_page
+from FileProcessing.pdf.PdfInspection import Utils
 import re
 from PyPDF2 import PdfFileReader
 
@@ -57,7 +57,7 @@ def find_isbns_in_pdf(file_path):
             # Look through each page for isbns
             isbns = []
             for x in range(1, number_of_pages_to_check):
-                lines = get_lines_from_pdf_page(pdf, x)
+                lines = Utils.get_lines_from_pdf_page(pdf, x)
                 # Filter out lines that don't make sense
                 new_isbns = find_isbn_numbers_in_lines(lines)
                 if new_isbns:
