@@ -4,7 +4,7 @@ import os
 import io
 
 
-def __get_lines_from_pdf(pdf, page_number):
+def get_lines_from_pdf(pdf, page_number):
 
     # Extract the text from the page
     page = pdf.getPage(page_number)
@@ -27,15 +27,15 @@ def get_lines_from_pdf_page(o, page_number):
         # It could be a buffer, pdf, or file path
         if isinstance(o, io.BufferedIOBase):
             pdf = PdfFileReader(o)
-            return __get_lines_from_pdf(pdf, page_number)
+            return get_lines_from_pdf(pdf, page_number)
         elif type(o) == PdfFileReader:
             pdf = o
-            return __get_lines_from_pdf(pdf, page_number)
+            return get_lines_from_pdf(pdf, page_number)
         elif type(o) == str:
             file_path = o
             with open(file_path, 'rb') as f:
                 pdf = PdfFileReader(f)
-                return __get_lines_from_pdf(pdf, page_number)
+                return get_lines_from_pdf(pdf, page_number)
         else:
             raise Exception("The type supplied was not valid.")
     except Exception as e:

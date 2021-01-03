@@ -2,6 +2,10 @@ from Utils import get_lines_from_pdf_page
 import re
 from PyPDF2 import PdfFileReader
 
+
+# These functions assume they will run on pdfs which have text
+
+
 def find_isbn_number_in_line(possible_title):
 
     # The possible isbn formats are:
