@@ -1,7 +1,8 @@
 from FileProcessing.pdf.PdfInspection import TextDetection, IsbnSearch
-from FileProcessing import ProcessFile
+from FileProcessing import ProcessFile, VcsFile
 import traceback
 import os
+import shutil
 
 def process_pdf(abs_file_path, directories):
     try:
@@ -19,8 +20,16 @@ def process_pdf(abs_file_path, directories):
             ProcessFile.reject_file(abs_file_path, directories["reject"], "No ISBN")
             return
 
-        # Create git repository and add file, and other files
+        # If we got more than one isbn we will have to narrow it down
+        # We will need to lookup the data from sites and see if there are matches for things
+        # eg. b-ok will list the title and authors and we will check if those are there
+        isbn = isbns[0]
 
+        # Create git repository and add file
+        VcsFile.cleanup_old_wip(isbn, directories)
+        VcsFile.create_repo_and_add_file(abs_file_path, isbn, directories)
+
+        s = ""
         # Get metadata for isbn
         # Get isbn for isbn
         # Update marc with metadata (if necessary)

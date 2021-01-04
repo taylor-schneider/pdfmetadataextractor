@@ -4,7 +4,8 @@ import logging
 import shutil
 import sys
 import daemon
-
+import platform
+from ShellUtilities import Shell
 
 # Configure logging format and level
 log_format = '%(asctime)s,%(msecs)d %(levelname)-8s [%(module)s:%(funcName)s():%(lineno)d] %(message)s'
@@ -28,18 +29,23 @@ class Test_Deamon(TestCase):
         return pdf_directory
 
     def __get_demo_dir_path(self):
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        root_dir = os.path.dirname(current_dir)
-        demo_dir = os.path.join(root_dir, "demo")
-        return demo_dir
+        if platform.system() == 'Windows':
+            return r"C:\Users\Administrator\Documents\demo"
+        else:
+            return "/tmp/demo"
 
     def __cleanup_demo_dir(self):
         logging.debug("Cleaning up demo dir.")
         demo_dir_path = self.__get_demo_dir_path()
-        file_paths = self.__get_file_paths_from_dir(demo_dir_path)
-        for file_path in file_paths:
-            logging.debug("Removing file: {0}".format(file_path))
-            os.remove(file_path)
+        if os.path.exists(demo_dir_path):
+            #shutil.rmtree(demo_dir_path)
+            Shell.execute_shell_command("rm -rf {0}".format(demo_dir_path))
+        os.makedirs(demo_dir_path)
+        os.makedirs(os.path.join(demo_dir_path, "input"))
+        os.makedirs(os.path.join(demo_dir_path, "wip"))
+        os.makedirs(os.path.join(demo_dir_path, "complete"))
+        os.makedirs(os.path.join(demo_dir_path, "reject"))
+
 
     def __copy_file_to_dir(self, abs_file_path, absolute_dir_path):
         file_name = os.path.basename(abs_file_path)
@@ -64,7 +70,13 @@ class Test_Deamon(TestCase):
 
         # Set the args for the test
         logging.debug("Setting up test arguments")
-        testargs = ["--input", "../demo/input", "--wip", "../demo/wip", "--complete", "../demo/complete", "--reject", "../demo/reject"]
+        demo_dir_path = self.__get_demo_dir_path()
+        testargs = [
+            "--input", "{0}/input".format(demo_dir_path),
+            "--wip", "{0}/wip".format(demo_dir_path),
+            "--complete", "{0}/complete".format(demo_dir_path),
+            "--reject", "{0}/reject".format(demo_dir_path)
+        ]
         current_args = sys.argv
         sys.argv = [current_args[0]] + testargs
 
@@ -76,5 +88,7 @@ class Test_Deamon(TestCase):
         demo_dir_path = self.__get_demo_dir_path()
         reject_dir_path = os.path.join(demo_dir_path, "reject")
         rejected_file_paths = self.__get_file_paths_from_dir(reject_dir_path)
-        self.assertEqual(1, len(rejected_file_paths))
+        self.assertEqual(4, len(rejected_file_paths))
 
+        # Cleanup
+        self.__cleanup_demo_dir()

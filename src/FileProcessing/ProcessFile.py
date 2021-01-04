@@ -2,6 +2,7 @@ import os
 import logging
 from FileProcessing.pdf.PdfProcessing import ProcessPdf
 
+
 def move_file_to_dir(abs_file_path, absolute_dir_path):
     file_name = os.path.basename(abs_file_path)
     new_abs_file_path = os.path.join(absolute_dir_path, file_name)
@@ -26,7 +27,6 @@ def process_file(abs_file_path, directories):
     # Process the file
     if file_extension == ".pdf":
         ProcessPdf.process_pdf(abs_file_path, directories)
-
 
 
 def process_files(abs_file_paths, directories):

@@ -10,9 +10,14 @@ def run_deamon(args):
 
     directories = validate_args(args)
 
-    # Get a list of files from the input directory that need to be processed and start work
+    # Get a list of files from the input directory that need to be processed
     file_names = os.listdir(directories["input"])
     file_paths_to_process = [os.path.join(directories["input"], file_name) for file_name in file_names]
+
+    # Ignore hidden files
+    file_paths_to_process = [file_path for file_path in file_paths_to_process if not os.path.basename(file_path).startswith(".")]
+
+    # Do the work
     ProcessFile.process_files(file_paths_to_process, directories)
 
 
